@@ -1,0 +1,282 @@
+[
+    {
+        "id": "e912438c0807e718",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8fc4c8da.b4f05",
+        "type": "debug",
+        "z": "e912438c0807e718",
+        "name": "payload",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "117f3e4d.f5e4bf",
+        "type": "function",
+        "z": "e912438c0807e718",
+        "name": "",
+        "func": "msg.topic =\"linear velocity\"\nvar value = global.get('velMessage')\nmsg.payload= {\n    \"gramiki-taxytita\" : value\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 300,
+        "wires": [
+            [
+                "8fc4c8da.b4f05",
+                "6694d58b6d2f2ed4"
+            ]
+        ]
+    },
+    {
+        "id": "9ecffc0207adb525",
+        "type": "mqtt in",
+        "z": "e912438c0807e718",
+        "name": "",
+        "topic": "linear velocity",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d08c36a.2f494c8",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 390,
+        "y": 300,
+        "wires": [
+            [
+                "0731564f9492834f"
+            ]
+        ]
+    },
+    {
+        "id": "6743841d06fbbfc6",
+        "type": "aedes broker",
+        "z": "e912438c0807e718",
+        "name": "",
+        "mqtt_port": 1883,
+        "mqtt_ws_bind": "port",
+        "mqtt_ws_port": "",
+        "mqtt_ws_path": "",
+        "cert": "",
+        "key": "",
+        "certname": "",
+        "keyname": "",
+        "persistence_bind": "memory",
+        "dburl": "",
+        "usetls": false,
+        "x": 770,
+        "y": 180,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "6694d58b6d2f2ed4",
+        "type": "influxdb out",
+        "z": "e912438c0807e718",
+        "influxdb": "535d8c17db435122",
+        "name": "",
+        "measurement": "velocity",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "iot",
+        "bucket": "database",
+        "x": 1120,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "ae1e307217e4494e",
+        "type": "inject",
+        "z": "e912438c0807e718",
+        "name": "Start InfluxDB Move",
+        "props": [],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 400,
+        "y": 200,
+        "wires": [
+            [
+                "0731564f9492834f",
+                "e3aad198cae5f3f6"
+            ]
+        ]
+    },
+    {
+        "id": "0731564f9492834f",
+        "type": "change",
+        "z": "e912438c0807e718",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "velMessage",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 620,
+        "y": 300,
+        "wires": [
+            [
+                "117f3e4d.f5e4bf"
+            ]
+        ]
+    },
+    {
+        "id": "e3aad198cae5f3f6",
+        "type": "change",
+        "z": "e912438c0807e718",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "angularVelMessage",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 650,
+        "y": 380,
+        "wires": [
+            [
+                "72be6925db9c60d2"
+            ]
+        ]
+    },
+    {
+        "id": "7a235ab02233b64a",
+        "type": "mqtt in",
+        "z": "e912438c0807e718",
+        "name": "",
+        "topic": "angular velocity",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "d08c36a.2f494c8",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 400,
+        "y": 380,
+        "wires": [
+            [
+                "e3aad198cae5f3f6"
+            ]
+        ]
+    },
+    {
+        "id": "72be6925db9c60d2",
+        "type": "function",
+        "z": "e912438c0807e718",
+        "name": "function 1",
+        "func": "msg.topic = \"angular velocity\"\nvar value = global.get('angularVelMessage')\nmsg.payload = {\n    \"goniaki-taxytita\": value\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 380,
+        "wires": [
+            [
+                "6694d58b6d2f2ed4",
+                "da01ec86ff8784fb"
+            ]
+        ]
+    },
+    {
+        "id": "da01ec86ff8784fb",
+        "type": "debug",
+        "z": "e912438c0807e718",
+        "name": "payload",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1160,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "d08c36a.2f494c8",
+        "type": "mqtt-broker",
+        "name": "Aedes Broker",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "535d8c17db435122",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "photoresistor_db",
+        "name": "influxDB",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://localhost:8086",
+        "rejectUnauthorized": true
+    }
+]
